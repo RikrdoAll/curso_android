@@ -54,8 +54,11 @@ public class ImcActivity extends AppCompatActivity {
                     .create();
             dialog.show();
 
+            Log.d("Teste", "localizando objeto");
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            Log.d("Teste", "objeto localizado");
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            Log.d("Teste", "mensagem exibida");
         });
 
     }

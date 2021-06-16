@@ -1,5 +1,6 @@
 package co.tiagoaguiar.codelab.myapplication;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
 //	private View btnImc;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,21 +55,32 @@ public class MainActivity extends AppCompatActivity {
 		List<MainItem> mainItens = new ArrayList<>();
 		mainItens.add(new MainItem(1, R.drawable.ic_baseline_wb_sunny_24, R.string.imc, Color.GREEN));
 		mainItens.add(new MainItem(2, R.drawable.ic_baseline_visibility_24, R.string.tmb, Color.YELLOW));
-		mainItens.add(new MainItem(3, R.drawable.bg_button_accent, R.string.app_name, Color.RED));
-
-		mainItens.add(new MainItem(1, R.drawable.ic_baseline_wb_sunny_24, R.string.imc, Color.GREEN));
-		mainItens.add(new MainItem(2, R.drawable.ic_baseline_visibility_24, R.string.tmb, Color.YELLOW));
-
 
 		MainAdapter mainAdapter = new MainAdapter(mainItens);
+		mainAdapter.setListener(id -> {
+			switch (id) {
+				case 1:
+					startActivity(new Intent(MainActivity.this, ImcActivity.class));
+					break;
+				case 2:
+					startActivity(new Intent(MainActivity.this, TmbActivity.class));
+					break;
+			}
+
+		});
 		rvMain.setAdapter(mainAdapter);
 	}
 
-	private class MainAdapter extends RecyclerView.Adapter<MainViewHolder>{
+	private class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder>{
 		private List<MainItem> mainItens;
+		private OnItemClickListener listener;
 
 		public MainAdapter(List<MainItem> mainItens) {
 			this.mainItens = mainItens;
+		}
+
+		public void setListener(OnItemClickListener listener) {
+			this.listener = listener;
 		}
 
 		@NonNull
@@ -87,28 +98,36 @@ public class MainActivity extends AppCompatActivity {
 		public int getItemCount() {
 			return mainItens.size();
 		}
-	}
 
-	private class MainViewHolder extends RecyclerView.ViewHolder {
+		private class MainViewHolder extends RecyclerView.ViewHolder {
 
-		private final TextView textViewTitulo;
-		private final LinearLayout btnImc;
-		private final ImageView imgIcon;
+			private final TextView textViewTitulo;
+			private final LinearLayout btnImc;
+			private final ImageView imgIcon;
 
 
-		public MainViewHolder(@NonNull View itemView) {
-			super(itemView);
-			textViewTitulo = itemView.findViewById(R.id.item_txt_name);
-			imgIcon = itemView.findViewById(R.id.item_img_icon);
+			public MainViewHolder(@NonNull View itemView) {
+				super(itemView);
+				textViewTitulo = itemView.findViewById(R.id.item_txt_name);
+				imgIcon = itemView.findViewById(R.id.item_img_icon);
 //			containter = (LinearLayout) itemView;  //para LinearLayout
-			btnImc = (LinearLayout) itemView.findViewById(R.id.btn_imc);
+				btnImc = (LinearLayout) itemView.findViewById(R.id.btn_imc);
+			}
+
+			public void bind(MainItem mainItem) {
+
+				btnImc.setOnClickListener(view -> {
+					listener.onClick(mainItem.getId());
+				});
+
+				textViewTitulo.setText(mainItem.getTextStringId());
+				imgIcon.setImageResource(mainItem.getDrawableId());
+				btnImc.setBackgroundColor(mainItem.getColor());
+
+			}
 		}
 
-		public void bind(MainItem mainItem) {
-			textViewTitulo.setText(mainItem.getTextStringId());
-			imgIcon.setImageResource(mainItem.getDrawableId());
-			btnImc.setBackgroundColor(mainItem.getColor());
-		}
 	}
+
 
 }
