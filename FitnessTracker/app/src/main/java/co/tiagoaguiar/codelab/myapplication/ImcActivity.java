@@ -1,9 +1,9 @@
 package co.tiagoaguiar.codelab.myapplication;
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,37 +28,34 @@ public class ImcActivity extends AppCompatActivity {
         Button btnSend = findViewById(R.id.btn_imc_send);
 
 
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validate()) {
-                    Toast.makeText(getBaseContext(), R.string.fields_message, Toast.LENGTH_LONG).show();
-                    return;
-                }
+        btnSend.setOnClickListener(view -> {
+            if (!validate()) {
+                Toast.makeText(getBaseContext(), R.string.fields_message, Toast.LENGTH_LONG).show();
+                return;
+            }
 
-                int height = Integer.parseInt(edtHeight.getText().toString());
-                int weight = Integer.parseInt(edtWeight.getText().toString());
-                double imc = calculateImc(height, weight);
+            int height = Integer.parseInt(edtHeight.getText().toString());
+            int weight = Integer.parseInt(edtWeight.getText().toString());
+            double imc = calculateImc(height, weight);
 
-                int imcResponseId = imcResponse(imc);
+            int imcResponseId = imcResponse(imc);
 
-                Log.d("Teste", String.format("IMC: %f, peso: %d, Altura: %d - %d", imc, weight, height, imcResponseId));
+            Log.d("Teste", String.format("IMC: %f, peso: %d, Altura: %d - %d", imc, weight, height, imcResponseId));
 
 //                Toast.makeText(ImcActivity.this, imcResponseId, Toast.LENGTH_LONG).show();
 //                Toast.makeText(ImcActivity.this, "TESTEDDAFDASDF", Toast.LENGTH_LONG).show();
 
-                AlertDialog dialog = new AlertDialog.Builder(ImcActivity.this)
-                        .setTitle(getString(R.string.imc_response, imc))
-                        .setMessage(imcResponseId)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+            AlertDialog dialog = new AlertDialog.Builder(ImcActivity.this)
+                    .setTitle(getString(R.string.imc_response, imc))
+                    .setMessage(imcResponseId)
+                    .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
 
-                            }
-                        })
-                        .create();
-                dialog.show();
-            }
+                    })
+                    .create();
+            dialog.show();
+
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         });
 
     }
