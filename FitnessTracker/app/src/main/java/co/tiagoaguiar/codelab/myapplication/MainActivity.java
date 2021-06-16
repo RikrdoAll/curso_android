@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +49,16 @@ public class MainActivity extends AppCompatActivity {
 		//  Lenear vertical
 //		rvMain.setLayoutManager(new LinearLayoutManager(this));
 
-		//
-		rvMain.setLayoutManager(new LinearLayoutManager(this));;
+		// grid
+		rvMain.setLayoutManager(new GridLayoutManager(this, 2 ));
 
 		List<MainItem> mainItens = new ArrayList<>();
 		mainItens.add(new MainItem(1, R.drawable.ic_baseline_wb_sunny_24, R.string.imc, Color.GREEN));
 		mainItens.add(new MainItem(2, R.drawable.ic_baseline_visibility_24, R.string.tmb, Color.YELLOW));
-		mainItens.add(new MainItem(4, R.drawable.bg_button_accent, R.string.app_name, Color.RED));
+		mainItens.add(new MainItem(3, R.drawable.bg_button_accent, R.string.app_name, Color.RED));
+
+		mainItens.add(new MainItem(1, R.drawable.ic_baseline_wb_sunny_24, R.string.imc, Color.GREEN));
+		mainItens.add(new MainItem(2, R.drawable.ic_baseline_visibility_24, R.string.tmb, Color.YELLOW));
 
 
 		MainAdapter mainAdapter = new MainAdapter(mainItens);
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 	private class MainViewHolder extends RecyclerView.ViewHolder {
 
 		private final TextView textViewTitulo;
-		private final LinearLayout containter;
+		private final LinearLayout btnImc;
 		private final ImageView imgIcon;
 
 
@@ -98,13 +100,14 @@ public class MainActivity extends AppCompatActivity {
 			super(itemView);
 			textViewTitulo = itemView.findViewById(R.id.item_txt_name);
 			imgIcon = itemView.findViewById(R.id.item_img_icon);
-			containter = (LinearLayout) itemView;
+//			containter = (LinearLayout) itemView;  //para LinearLayout
+			btnImc = (LinearLayout) itemView.findViewById(R.id.btn_imc);
 		}
 
 		public void bind(MainItem mainItem) {
 			textViewTitulo.setText(mainItem.getTextStringId());
 			imgIcon.setImageResource(mainItem.getDrawableId());
-			containter.setBackgroundColor(mainItem.getColor());
+			btnImc.setBackgroundColor(mainItem.getColor());
 		}
 	}
 
