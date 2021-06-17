@@ -1,10 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/teal_200"
-    tools:context=".TmbActivity">
+    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:context=".TmbActivity"
+        >
+        <TextView
+            style="@style/TextViewForm"
+            android:text="@string/tmb_desc"
+            />
+
+        <EditText
+            android:id="@+id/edit_tmb_weight"
+            android:hint="@string/weight"
+            style="@style/EditTextNumberForm"
+            />
+
+        <EditText
+            android:id="@+id/edit_tmb_height"
+            android:hint="@string/height"
+            style="@style/EditTextNumberForm"
+            />
+
+        <EditText
+            android:id="@+id/edit_age"
+            android:hint="@string/age"
+            style="@style/EditTextNumberForm"
+            />
+
+        <Spinner
+            android:id="@+id/tmb_lifestyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/SpinnerForm"
+            android:entries="@array/tmb_lifestyle"
+
+            />
+
+        <Button
+            android:id="@+id/btn_tmb_send"
+            style="@style/ButtonForm"
+            android:layout_width="161dp"
+            android:text="@string/calc" />
+    </LinearLayout>
+
+
+</ScrollView>

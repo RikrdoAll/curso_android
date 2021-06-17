@@ -97,7 +97,7 @@ public class ImcActivity extends AppCompatActivity {
 
     private void openListCalcActivity() {
         Intent intent = new Intent(ImcActivity.this, ListCalcActivity.class);
-        intent.putExtra("type", "imc");
+        intent.putExtra("type", "tmb");
         startActivity(intent);
     }
 

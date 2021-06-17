@@ -23,6 +23,7 @@ import co.tiagoaguiar.codelab.util.Geral;
 
 public class ListCalcActivity extends AppCompatActivity {
 
+    String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,12 @@ public class ListCalcActivity extends AppCompatActivity {
         rvList.setLayoutManager(new LinearLayoutManager(this));
 
 
+
         if(null != extras) {
-            String type = extras.getString("type");
+            type = extras.getString("type");
+            TextView titulo = findViewById(R.id.text_view_list_titulo_result);
+            titulo.setText(type.toUpperCase());
+
 
             new Thread(() ->{
                 List<Register> registers = SqlHelper.getInstance(this).getRegisterBy(type);

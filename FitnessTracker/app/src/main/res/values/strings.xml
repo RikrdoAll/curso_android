@@ -28,4 +28,5 @@
     <string name="delete_message">Você realmente quer excluir o registro?</string>
     <string name="cancel">Cancelar</string>
     <string name="falha_save">Falha ao salvar o registro</string>
+    <string name="listar">Listar</string>
 </resources>
