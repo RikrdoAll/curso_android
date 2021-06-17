@@ -1,19 +1,22 @@
 package co.tiagoaguiar.codelab.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ImcActivity extends AppCompatActivity {
-
 
     private EditText edtWeight;
     private EditText edtHeight;
@@ -41,15 +44,25 @@ public class ImcActivity extends AppCompatActivity {
             int imcResponseId = imcResponse(imc);
 
             Log.d("Teste", String.format("IMC: %f, peso: %d, Altura: %d - %d", imc, weight, height, imcResponseId));
-
-//                Toast.makeText(ImcActivity.this, imcResponseId, Toast.LENGTH_LONG).show();
-//                Toast.makeText(ImcActivity.this, "TESTEDDAFDASDF", Toast.LENGTH_LONG).show();
-
             AlertDialog dialog = new AlertDialog.Builder(ImcActivity.this)
                     .setTitle(getString(R.string.imc_response, imc))
                     .setMessage(imcResponseId)
                     .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
+                    })
+                    .setNegativeButton(R.string.save, (dialog1, which) ->{
+                        new Thread(() -> {
+                            long calcId = SqlHelper.getInstance(ImcActivity.this).addItem("imc", imc);
+//                             executar na trhead principal para apresentar a mensagem
+                            runOnUiThread(() -> {
+                                if (calcId > 0) {
+                                    Toast.makeText(ImcActivity.this, R.string.calc_saved, Toast.LENGTH_SHORT).show();
+                                    openListCalcActivity();
 
+                                } else
+                                    Toast.makeText(ImcActivity.this, R.string.falha_save, Toast.LENGTH_LONG).show();
+                            });
+
+                        }).start();
                     })
                     .create();
             dialog.show();
@@ -57,10 +70,35 @@ public class ImcActivity extends AppCompatActivity {
             Log.d("Teste", "localizando objeto");
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             Log.d("Teste", "objeto localizado");
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
+            imm.hideSoftInputFromWindow(edtHeight.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(edtWeight.getWindowToken(), 0);
             Log.d("Teste", "mensagem exibida");
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_list:
+                openListCalcActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void openListCalcActivity() {
+        Intent intent = new Intent(ImcActivity.this, ListCalcActivity.class);
+        intent.putExtra("type", "imc");
+        startActivity(intent);
     }
 
     @StringRes
