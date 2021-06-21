@@ -92,13 +92,15 @@ public class ListCalcActivity extends AppCompatActivity {
             textViewResult = itemView.findViewById(R.id.text_view_list_result);
         }
 
-        @SuppressLint("ResourceAsColor")
         public void bind(Register data, int position) {
-
             if (position%2==0)
-                ((LinearLayout) itemView).setBackgroundColor(R.color.white);
+                ((LinearLayout) itemView).setBackgroundResource(R.color.white);
             else
-                ((LinearLayout) itemView).setBackgroundColor(R.color.lowgray);
+                ((LinearLayout) itemView).setBackgroundResource(R.color.lowgray);
+//            if (position%2==0)
+//                ((LinearLayout) itemView).setBackgroundColor(R.color.white);
+//            else
+//                ((LinearLayout) itemView).setBackgroundColor(R.color.lowgray);
 
             String formated = "";
             try {
