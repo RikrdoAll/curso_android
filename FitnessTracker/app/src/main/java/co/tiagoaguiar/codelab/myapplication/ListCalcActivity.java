@@ -97,10 +97,6 @@ public class ListCalcActivity extends AppCompatActivity {
                 ((LinearLayout) itemView).setBackgroundResource(R.color.white);
             else
                 ((LinearLayout) itemView).setBackgroundResource(R.color.lowgray);
-//            if (position%2==0)
-//                ((LinearLayout) itemView).setBackgroundColor(R.color.white);
-//            else
-//                ((LinearLayout) itemView).setBackgroundColor(R.color.lowgray);
 
             String formated = "";
             try {
