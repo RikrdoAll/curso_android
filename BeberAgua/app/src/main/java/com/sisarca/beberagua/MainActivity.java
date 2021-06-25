@@ -3,10 +3,14 @@ package com.sisarca.beberagua;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -89,15 +94,36 @@ public class MainActivity extends AppCompatActivity {
         salvarConfiguracao();
     }
 
-    private void atualizarBotao(boolean novoStatus) {
-        if (novoStatus) {
+    private void atualizarBotao(boolean alarmeAtivo) {
+        if (alarmeAtivo) {
+            btnNotify.setText(R.string.pause);
+            btnNotify.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.black));
+
+            /// ativando notificação
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            calendar.set(Calendar.SECOND, 0);
+
+            Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+            notificationIntent.putExtra(NotificationPublisher.KEY_NOTIFICATION, "Hora de beber água!");
+            notificationIntent.putExtra(NotificationPublisher.KEY_NOTIFICATION_ID, 1);
+            PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),  interval * 1000, broadcast);
+
+            // executa uma vez
+//            long futureInMillis = SystemClock.elapsedRealtime() + (interval * 1000*60);
+//            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, broadcast);
+        } else {
             btnNotify.setText(R.string.notify);
             btnNotify.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorAccent));
 //            setBackgroundColor para android studio de versão antiga, antes do 4.1
 //            btnNotify.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
-        } else {
-            btnNotify.setText(R.string.pause);
-            btnNotify.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.black));
         }
     }
 
