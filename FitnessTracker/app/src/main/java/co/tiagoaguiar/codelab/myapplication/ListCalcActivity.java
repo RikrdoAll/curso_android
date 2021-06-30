@@ -35,13 +35,10 @@ public class ListCalcActivity extends AppCompatActivity {
         RecyclerView rvList = findViewById(R.id.recycler_view_list);
         rvList.setLayoutManager(new LinearLayoutManager(this));
 
-
-
         if(null != extras) {
             type = extras.getString("type");
             TextView titulo = findViewById(R.id.text_view_list_titulo_result);
             titulo.setText(type.toUpperCase());
-
 
             new Thread(() ->{
                 List<Register> registers = SqlHelper.getInstance(this).getRegisterBy(type);
@@ -53,7 +50,6 @@ public class ListCalcActivity extends AppCompatActivity {
 
             }).start();
         }
-
     }
 
     private class ListCalcAdapter extends RecyclerView.Adapter<ListCalcViewHolder> {
